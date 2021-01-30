@@ -7,6 +7,7 @@
  *    an API call and returns a Promise containing the result. Uncomment code
  *    block #1 and run the code. What happens? (HINT: You may need to run
  *    `npm init` first.)
+ *    The first person's information is displayed and resolved as a JSON object.
  * 
  * 
  * 2. Sometimes, when making API calls, we want to make a bunch of calls in
@@ -15,6 +16,8 @@
  * 
  *    Uncomment code block #2 and run the code. What happens? What advantages 
  *    does `Promise.all` give us when dealing with promises?
+ *    This is great trick of blocking code for async tasks, that way you speed up the process of retrieving bulk data with usually the same returned data structure.
+ *    This is a way to make code wait until all promises are resolved in the Promise.all, then it returns an array of the resolved values.
  * 
  * 
  * 3. Make another variable `planet1Promise` and assign to it the result of
@@ -56,22 +59,25 @@ const person1Promise = makePromise('https://swapi.co/api/people/1')
 const person2Promise = makePromise('https://swapi.co/api/people/2')
 const person3Promise = makePromise('https://swapi.co/api/people/3')
 
+const planet1Promise = makePromise('https://swapi.co/api/planets/1');
+
 /* Uncomment me! #1 */
-// person1Promise.then(function(personResult) {
-//     console.log(`Resulting person's name: ${personResult.name}`);
-// }).catch(function(err) {
-//     console.log("Got an error!")
-//     console.log(err);
-// });
+person1Promise.then(function(personResult) {
+    console.log(`Resulting person's name: ${personResult.name}`);
+}).catch(function(err) {
+    console.log("Got an error!")
+    console.log(err);
+});
 
 /* Uncomment me! #2 */
-// Promise.all([person1Promise, person2Promise, person3Promise])
-//     .then(function(results) {
-//         for (let i = 0; i < 3; i++) {
-//             console.log(`Person ${i+1}'s name: ${results[i].name}`)
-//         }
-//     })
-//     .catch(function(err) {
-//         console.log('Got an error!')
-//         console.log(err)
-//     })
+Promise.all([person1Promise, person2Promise, person3Promise, planet1Promise])
+  .then(function (results) {
+    for (let i = 0; i < 3; i++) {
+      console.log(`Person ${i + 1}'s name: ${results[i].name}`);
+    }
+    console.log(`Planet: ${results[3].name}`)
+  })
+  .catch(function (err) {
+    console.log('Got an error!');
+    console.log(err);
+  });
